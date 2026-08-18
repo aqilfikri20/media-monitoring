@@ -2,8 +2,29 @@ const uploadFile = document.getElementById("upload-file");
 const fileInput = document.getElementById("file");
 const uploadStatus = document.getElementById("upload-status");
 const articleList = document.getElementById("article-list");
+const searchInput =document.getElementById("search-input");
 
+const searchButton =document.getElementById("search-button");
 const API_URL = "http://localhost:3000";
+
+function resetPageAndLoad() {
+    currentPage = 1;
+    loadArticles();
+}
+
+searchButton.addEventListener(
+    "click",
+    resetPageAndLoad
+);
+
+searchInput.addEventListener(
+    "keydown",
+    (event) => {
+        if (event.key === "Enter") {
+            resetPageAndLoad();
+        }
+    }
+);
 
 uploadFile.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -63,3 +84,27 @@ uploadFile.addEventListener("submit", async (event) => {
             "Terjadi kesalahan.";
     }
 });
+
+async function loadArticles() {
+    try {
+        const response = await fetch(
+            `${API_URL}/mentions`
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "Gagal mengambil article."
+            );
+        }
+
+        const result = await response.json();
+
+        renderArticles(result.data);
+
+    } catch (error) {
+        console.error(
+            "Load articles error:",
+            error
+        );
+    }
+}
