@@ -3,8 +3,11 @@ const fileInput = document.getElementById("file");
 const uploadStatus = document.getElementById("upload-status");
 const articleList = document.getElementById("article-list");
 const searchInput =document.getElementById("search-input");
-
 const searchButton =document.getElementById("search-button");
+const sourceFilter =document.getElementById("source-filter");
+const sortFilter =document.getElementById("sort-filter");
+const fromDate =document.getElementById("from-date");
+const toDate =document.getElementById("to-date");
 const API_URL = "http://localhost:3000";
 
 function resetPageAndLoad() {
@@ -24,6 +27,46 @@ searchInput.addEventListener(
             resetPageAndLoad();
         }
     }
+);
+
+fromDate.addEventListener(
+    "change",
+    resetPageAndLoad
+);
+
+toDate.addEventListener(
+    "change",
+    resetPageAndLoad
+);
+
+sourceFilter.addEventListener(
+    "change",
+    resetPageAndLoad
+);
+
+sortFilter.addEventListener(
+    "change",
+    resetPageAndLoad
+);
+
+fromDate.addEventListener(
+    "change",
+    resetPageAndLoad
+);
+
+toDate.addEventListener(
+    "change",
+    resetPageAndLoad
+);
+
+sourceFilter.addEventListener(
+    "change",
+    resetPageAndLoad
+);
+
+sortFilter.addEventListener(
+    "change",
+    resetPageAndLoad
 );
 
 uploadFile.addEventListener("submit", async (event) => {
@@ -85,10 +128,72 @@ uploadFile.addEventListener("submit", async (event) => {
     }
 });
 
+async function loadSources() {
+    const response = await fetch(
+        `${API_URL}/mentions/sources`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            "Gagal mengambil source."
+        );
+    }
+
+    const result =
+        await response.json();
+
+    sourceFilter.innerHTML = `
+        <option value="">
+            All Sources
+        </option>
+    `;
+
+    result.data.forEach((source) => {
+        const option =
+            document.createElement("option");
+
+        option.value = source;
+        option.textContent = source;
+
+        sourceFilter.appendChild(option);
+    });
+}
+
 async function loadArticles() {
+    const params = new URLSearchParams();
+    
+    const source = sourceFilter.value;
+    if (source) {
+        params.set("source", source);
+    }
+
+    const from = fromDate.value;
+
+    if (from) {
+        params.set("from", from);
+    }
+
+    const to = toDate.value;
+
+    if (to) {
+        params.set("to", to);
+    }
+
+    const [sort, order] =
+        sortFilter.value.split("-");
+
+    params.set("sort", sort);
+    params.set("order", order);
+    const search =
+        searchInput.value.trim();
+
+    if (search) {
+        params.set("q", search);
+    }
+
     try {
         const response = await fetch(
-            `${API_URL}/mentions`
+            `${API_URL}/mentions?${params}`
         );
 
         if (!response.ok) {
@@ -97,7 +202,8 @@ async function loadArticles() {
             );
         }
 
-        const result = await response.json();
+        const result =
+            await response.json();
 
         renderArticles(result.data);
 
