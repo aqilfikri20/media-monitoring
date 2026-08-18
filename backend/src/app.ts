@@ -1,10 +1,13 @@
 import express from "express";
 import { pool } from "./connect_db";
+import mentionsRouter from "./routes/mentions";
+import cors from "cors";
 
 
 const app = express();
-
+app.use(cors());
 app.use(express.json());
+app.use(mentionsRouter);
 app.get("/", async (_req, res) => {
     const result = await pool.query("SELECT NOW()");
 
