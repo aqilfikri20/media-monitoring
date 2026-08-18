@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <h1>Media Monitoring</h1>
+    </header>
+    <div class="container">
+
+        <div class="wrap-left">
+            <div class="wrap-upload">
+                <h2>Upload File</h2>
+                <form id="upload-file" method="POST" >
+                    <input type="file" id="file" name="file-mentions" accept=".json, .xls">
+                    <button type="submit">Upload</button>
+                    <p id="upload-status"></p>
+                </form>
+
+            </div>
+            <div class="wrap-graph">
+                <div class="graph-header">
+                    <h2>Graph</h2>
+                    <select id="stats-group">
+                        <option value="source">
+                            By Source
+                        </option>
+
+                        <option value="day">
+                            By Day
+                        </option>
+                    </select>
+                </div>
+
+                <div class="style-graph">
+                    <canvas id="stats-chart"></canvas>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="wrap-article">
+            <h2>Article</h2>
+            <div class="article-search">
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Search title, content, source, author..."
+                >
+
+                <button id="search-button">
+                    Search
+                </button>
+            </div>
+
+            <div class="wrap-article-filter">
+                <div class="article-filter">
+                    <select id="source-filter">
+                        <option value="">
+                            All Sources
+                        </option>
+                    </select>
+                    <select id="sort-filter">
+                        <option value="published_at-desc">
+                            Newest
+                        </option>
+                        <option value="published_at-asc">
+                            Oldest
+                        </option>
+
+                        <option value="title-asc">
+                            Title A-Z
+                        </option>
+
+                        <option value="title-desc">
+                            Title Z-A
+                        </option>
+
+                        <option value="source-asc">
+                            Source A-Z
+                        </option>
+
+                        <option value="source-desc">
+                            Source Z-A
+                        </option>
+                    </select>
+                </div>
+
+                <div class="date-filter">
+
+                    <label for="from-date">
+                        From
+                    </label>
+
+                    <input
+                        type="date"
+                        id="from-date"
+                    >
+
+                    <label for="to-date">
+                        To
+                    </label>
+
+                    <input
+                        type="date"
+                        id="to-date"
+                    >
+
+                </div>
+            </div>
+
+            <div class="wrap-article-list">
+                <div id="article-list" class="article-list"></div>
+                <div class="pagination">
+                    <button id="prev-page">
+                        Previous
+                    </button>
+
+                    <div id="page-numbers"></div>
+
+                    <button id="next-page">
+                        Next
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
