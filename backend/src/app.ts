@@ -1,17 +1,19 @@
 import express from "express";
+import { pool } from "./connect_db";
+
 
 const app = express();
 
 app.use(express.json());
+app.get("/", async (_req, res) => {
+    const result = await pool.query("SELECT NOW()");
 
-app.get("/", (_req, res) => {
-  res.json({
-    message: "News Ingestion API is running"
-  });
-});
+    res.json({
+        message: "Halo Semua. API Jalan Nih",
+        database_time: result.rows[0].now,
+    })
+})
 
-const PORT = 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+app.listen(3000, () => {
+    console.log("server running on port 3000")
+})
