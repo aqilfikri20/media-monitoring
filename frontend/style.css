@@ -171,9 +171,10 @@ form button {
 }
 
 .article-list {
-    width: 100%;
+    width: 95%;
     height: 87%;
     display: grid;
+    justify-content: center;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
     overflow-y: auto;
@@ -371,8 +372,10 @@ form button {
 }
 
 .wrap-article-list{
-    height: 80%;
+    width: 100%;
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
     height: 100%;
 }
