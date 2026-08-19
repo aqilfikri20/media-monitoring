@@ -1,4 +1,4 @@
-CREATE TABLE mentions (
+CREATE TABLE IF NOT EXISTS mentions (
     id BIGSERIAL PRIMARY KEY,
     external_id TEXT,
     source TEXT,
