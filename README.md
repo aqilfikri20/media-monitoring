@@ -173,7 +173,9 @@ waktu yang dihabiskan 28 jam
 - Sesi Ketiga Selasa, pukul 19.00 sampai sekitai 23.59. Total sekitar 5 jam.
 - Sesi Keempat Rabu, pukul 08.00 sampai 11.00. Total sekitar 3 jam
 - Sesi Kelima Rabu, Pukul 15.00 sampai 18.00. Total sekitar 3 jam
-- Total Waktu yang dibutuhkan 25 Jam
+-Sesi Keenam Rabu 21.30-22.30. Total sekitar 1 jam
+
+- Total Waktu yang dibutuhkan sekitar 26 Jam
 
 # Perbaikan Jika Diberi waktu 1 minggu lagi
 - Perbaikan di Frontend yang menurut saya masih tidak menarik.
