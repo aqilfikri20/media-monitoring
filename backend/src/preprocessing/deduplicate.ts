@@ -74,7 +74,6 @@ export function deduplicateMentions(
                     )
             );
 
-        // Tidak ditemukan duplicate
         if (existingIndex === -1) {
             result.push(mention);
             continue;
@@ -88,7 +87,6 @@ export function deduplicateMentions(
             continue;
         }
 
-        // Duplicate → simpan content terpanjang
         result[existingIndex] =
             keepLongestContent(
                 existing,
