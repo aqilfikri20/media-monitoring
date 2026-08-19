@@ -42,29 +42,31 @@ Backend:
 1. Bulk Ingest
 endpoint:
 POST /internal/mentions/bulk
+example:
+POST /internal/mentions/bulk`
 
-2. Search
+3. Search
 endpoint:
 GET /mentions
 example:
 GET /mentions?q=ringgit
 
-3. Source Filter
+4. Source Filter
 example:
 GET /mentions?source=Reuters
 
-4. Date Range
+5. Date Range
 example:
 GET /mentions?from=2026-08-01&to=2026-08-19
 
-5. Sorting
+6. Sorting
 GET /mentions?sort=published_at&order=desc
 
-6. Pagination
+7. Pagination
 example:
 GET /mentions?page=2
 
-7. Show Statistics
+8. Show Statistics
 endpoint:
 GET /mentions/stats
 example:
@@ -88,14 +90,13 @@ index.html
 style.css
 script.js
 
-
 # DATA PROCESSING
 Data Processing saya pisahkan menjadi 3 tahap berurutan
 - Normalisasi (Normalization)
 - Penanganan Nilai Kosong (Missing Value Handling)
 - Menghapus Duplikasi (Duplicate Removal)
 
-Dari tahapan disitu mungkin akan timbul pertanyaan. 
+Dari tahapan tersebut mungkin akan timbul pertanyaan. 
 Kenapa urutan seperti itu? kenapa Missing value Handling diurutan kedua, dan sebagainya.
 Alasan saya membuat sepeti itu karena agar tidak kehilangan data penting yang mungkin akan berguna. 
 
@@ -154,6 +155,16 @@ Jika data masih memiliki nilai null setelah dicari berdasarkan duplikasi. Maka a
 
 3. Duplicate Removal
    Ini adalah tahap akhir pemrosesan data. Ada 2 metode pengecekan duplikat, yaitu berdasarkan duplikat URL dan Berdasarkan 7 kata pertama content. Jika tidak ditemukan url yang sama, maka akan dicek berdasarkan content. URL di tahap pertama karena url adalah nilai yang seharusnya tidak boleh terduplikasi, karena sudah pasti isinya sama. Pengecekan selanjutnya dengan content saya lakukakan karena aada kemungkinan data memiliki url berbeda (misal url dengan diikuti id atau halaman page) walaupun isinya sama. Oleh karena itu pengecekan content perlu dilakukan juga. Data dengan nilai duplikat akan dihapus dan data yang akan diambil adalah data dengan isi content terpanjang.
+
+# Duplication Verification
+Setelah proses deduplikasi selesai, setiap record yang tersisa dibuatkan "dedupe_key" untuk dilakukan verifikasi duplikasi lebih lanjut. Varifikasi duplikasi ini dilakukan apabila terjadi kasus file yang sama dikirim 2 kali, atau kasus file kedua yang dikirim memiliki data yang sama di database. Untuk menangani hal tersebut dilakukan dengan aturan:
+- Data dengan url dan 7 kata awal dalam content yang sama dianggap sebagai duplicate.
+- Data dengan url sama tapi content berbeda, begitu pula sebaliknya, maka akan dipilih content terpanjang. karena saya asumsikan content yang panjang lebih orisinil dan terpercaya
+- Jika ditemukan duplicate, data dengan content yang lebih panjang akan dipertahankan.
+- Jika belum ada, dilakukan INSERT ke database
+- Jika sudah ada, tetapi datanya berbeda, data yang dipilih sebelumnya dilakukan UPDATE ke database
+- JIka sudah ada dan datanya sama maka tidak ada perubahan yang terjadi
+
 
 # Time Spent
 waktu yang dihabiskan 28 jam
