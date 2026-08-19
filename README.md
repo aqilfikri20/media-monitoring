@@ -85,11 +85,11 @@ Alasan saya membuat sepeti itu karena agar tidak kehilangan data penting yang mu
    Normaliasasi ditahap pertama akan memperbaiki semua data tanpa menghapus data atau menghapus nilainya. Karena kemungkinan data tersebut mengandung nilai yang penting, maka data hanya akan ditangani dan dipertahankan isinya.
    
 Proses Normalization:
-- Menghapus tag HTML, seperti <p>, <div>, dan juga Menghapus elemen <script> dan <style> jika ditemukan.
-- Mengubah HTML entity menjadi karakter sebenarnya. Misal &nbsp menjadi spasi, &quot menjadi "
+- Menghapus tag HTML, Menghapus elemen <script> dan <style> jika ditemukan.
+- Mengubah HTML entity menjadi karakter sebenarnya. contoh &nbsp menjadi spasi, &quot menjadi (")
 - Menggabungkan spasi berlebih menjadi satu spasi.
 - Menghapus spasi di awal dan akhir teks (trim).
-- Mengubah nilai kosong, "", atau '' menjadi null.
+- Mengubah nilai kosong, (""), atau ('') menjadi null.
 - Mengubah penulisan source yang rusak menjadi nama yang sebenarnya. Contohnya "the star" menjadi "The Star", atau "thestar" menjadi "The Star". Jika source tidak ada di mapping maka source hanya akan diubah huruf pertama menjadi kapital.
 - Menghapus tanda koma pada angka. Misal 1,500 menjadi 1500.
 - Jika Nilai angka ada string misal "1500", makan akan diubah menjadi 1500
@@ -99,21 +99,20 @@ Proses Normalization:
 
 2. Missing Value Handling
    Penanganan nilai kosong saya lakukan diurutan kedua karena bisa saja ada kemungkinan diantara data yang didalamnya memiliki nilai yang null, ada nilai penting lain di dalamnya. Contoh:
-{
+Data 1
   source: The Star
   content: Ringgit Strengthens
   url: https://www.thestar.com.my/business
-},
-{
+
+Data 2
   source: null
   content: The ringgit opened higher against the greenback on Monday
   url: https://www.thestar.com.my/business
- },
-{
+ 
+Data 3
   source: The Star
   content: null
   url: https://www.thestar.com.my/business
-}
 
 Dari contoh data tersebut dapat dilihat bahwa Data 2 membawa nilai content yang lebih lengkap. Jadi Kita tidak boleh melakukan penghapusan duplikasi terlebih dahulu, walaupun ada Data 1 dengan value tanpa nilai null. Oleh karena itu semua nilai null pada data harus diisi semua, dan selanjutnya akan dilakukan proses penghapusan duplikasi. 
 
@@ -121,7 +120,7 @@ Proses Missing Value Handling:
 Data dengan nilai null akan dicari duplikat nya diantara semua. kemudian nilai null akan diisi dengan data duplikat. pencarian duplikat ini berdasarkan 3 value dengan berurutan.
 - pertama akan dicari berdasarkan external_id apakah diantara data apakah ada yang sama. external_id adalah kandidat pertama yang kemungkinan besar pasti ada didata. proses ini adalah yang paling mudah dan hemat pemrosesasan, sehingga saya tempatkan di urutan yang sama. Jika tidak ada yang sama, maka akan di lakukan proses selanjutnya
 - Kedua akan dicari berdasarkan url. url adalah kandidat terkuat kedua yang berpotensi ada dan juga hemat pemrosesan. Jika url tidak ada yang sama, maka akan dilakukan proses selanjutnya.
-- Ketiga akan dicari berdasarkan content, dimana akan dicari kesamaan dengan mengambil 7 kata pertama konten. sehingga akan dicari dengan y kata pertama yang sama.
+- Ketiga akan dicari berdasarkan content, dimana akan dicari kesamaan dengan mengambil 7 kata pertama konten. sehingga akan dicari dengan 7 kata pertama yang sama.
   
 Jika data masih memiliki nilai null setelah dicari berdasarkan duplikasi. Maka akan dibuat nilai baru dan data diusahan untuk dipertahankan karena kemungkinan akan berguna pada untuk statistik. prosesnya berurutan yaitu dengan cara:
 - external_id dengan nilai null akan dibuat nilai baru dengan id unik sendiri menggunakan randomUUID.
