@@ -14,7 +14,9 @@ const pageNumbers =document.getElementById("page-numbers");
 
 let currentPage = 1;
 let totalPages = 1;
-const API_URL = "http://localhost:3000";
+const API_URL =
+    window.APP_CONFIG?.API_URL ||
+    "http://localhost:3000";
 
 prevPage.addEventListener(
     "click",
