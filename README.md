@@ -71,6 +71,24 @@ example:
 GET /mentions/stats?group_by=source
 GET /mentions/stats?group_by=day
 
+# Schema Project
+dibuat menjadi dua folder sederhana yang memisahkan frontend dan backend
+backend/
+frontend/
+
+Isi backend/
+migration/ 
+==> dipisahkan dari source code karena migration digunakan untuk mengelola perubahan struktur database secara terkontrol dan dapat dilacak melalui Git.
+backend/src/
+==> berisi kode sumber utama aplikasi sehingga terpisah dari file konfigurasi seperti package.json, tsconfig.json, dan Dockerfile.
+
+isi frontend/
+hanya berisi 3 file karena hanya ingin membangun tampilan sederha
+index.html
+style.css
+script.js
+
+
 # DATA PROCESSING
 Data Processing saya pisahkan menjadi 3 tahap berurutan
 - Normalisasi (Normalization)
@@ -137,7 +155,20 @@ Jika data masih memiliki nilai null setelah dicari berdasarkan duplikasi. Maka a
 3. Duplicate Removal
    Ini adalah tahap akhir pemrosesan data. Ada 2 metode pengecekan duplikat, yaitu berdasarkan duplikat URL dan Berdasarkan 7 kata pertama content. Jika tidak ditemukan url yang sama, maka akan dicek berdasarkan content. URL di tahap pertama karena url adalah nilai yang seharusnya tidak boleh terduplikasi, karena sudah pasti isinya sama. Pengecekan selanjutnya dengan content saya lakukakan karena aada kemungkinan data memiliki url berbeda (misal url dengan diikuti id atau halaman page) walaupun isinya sama. Oleh karena itu pengecekan content perlu dilakukan juga. Data dengan nilai duplikat akan dihapus dan data yang akan diambil adalah data dengan isi content terpanjang.
 
+# Time Spent
+waktu yang dihabiskan 28 jam
+- sesi pertama dimulai dari recruiter mengirim pengumuman seleksi Senin 15.20 WIB, saya membaca informasi, dokumentasi dan apa saja yang dibutuhkan. Sekitar 15 menit setelah itu saya memulai coding, yaitu sekitar pukul 15.35 sampai sekitar 02.00 WIB. Total sekitar 10 Jam
+- Sesi kedua dimulai Selasa pukul 09.00 sampai pukul 13.00. Total sekitar 4 Jam.
+- Sesi Ketiga Selasa, pukul 19.00 sampai sekitai 23.59. Total sekitar 5 jam.
+- Sesi Keempat Rabu, pukul 08.00 sampai 11.00. Total sekitar 3 jam
+- Sesi Kelima Rabu, Pukul 15.00 sampai 18.00. Total sekitar 3 jam
+- Total Waktu yang dibutuhkan 25 Jam
 
+# Perbaikan Jika Diberi waktu 1 minggu lagi
+- Perbaikan di Frontend yang menurut saya masih tidak menarik.
+- Menambahkan validasi dan error handling yang lebih lengkap, baik pada frontend maupun backend, sehingga error dapat ditangani dengan lebih jelas.
+- Melakukan optimasi database, terutama pada query pencarian dan duplicate detection apabila jumlah data semakin besar
+- Meningkatkan keamanan aplikasi, seperti validasi input, pengelolaan environment variable, dan pembatasan akses terhadap endpoint tertentu.
 
 
 
