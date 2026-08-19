@@ -154,16 +154,16 @@ Jika data masih memiliki nilai null setelah dicari berdasarkan duplikasi. Maka a
 - published_at dengan nilai null akan menggunakan tanggal dan waktu saat proses ini dilakukan.
 
 3. Duplicate Removal
-   Ini adalah tahap akhir pemrosesan data. Ada 2 metode pengecekan duplikat, yaitu berdasarkan duplikat URL dan Berdasarkan 7 kata pertama content. Jika tidak ditemukan url yang sama, maka akan dicek berdasarkan content. URL di tahap pertama karena url adalah nilai yang seharusnya tidak boleh terduplikasi, karena sudah pasti isinya sama. Pengecekan selanjutnya dengan content saya lakukakan karena aada kemungkinan data memiliki url berbeda (misal url dengan diikuti id atau halaman page) walaupun isinya sama. Oleh karena itu pengecekan content perlu dilakukan juga. Data dengan nilai duplikat akan dihapus dan data yang akan diambil adalah data dengan isi content terpanjang.
-
-# Duplication Verification
-Setelah proses deduplikasi selesai, setiap record yang tersisa dibuatkan "dedupe_key" untuk dilakukan verifikasi duplikasi lebih lanjut. Varifikasi duplikasi ini dilakukan apabila terjadi kasus file yang sama dikirim 2 kali, atau kasus file kedua yang dikirim memiliki data yang sama di database. Untuk menangani hal tersebut dilakukan dengan aturan:
+Ini adalah tahap akhir pemrosesan data. Metode pengecekan duplikat berdasarkan duplikat URL dan Berdasarkan 7 kata pertama content. aturannya yaitu:
 - Data dengan url dan 7 kata awal dalam content yang sama dianggap sebagai duplicate.
 - Data dengan url sama tapi content berbeda, begitu pula sebaliknya, maka akan dipilih content terpanjang. karena saya asumsikan content yang panjang lebih orisinil dan terpercaya
-- Jika ditemukan duplicate, data dengan content yang lebih panjang akan dipertahankan.
+
+# Duplication Verification
+Setelah proses deduplikasi selesai, setiap record yang tersisa dibuatkan "dedupe_key" dari url untuk dilakukan verifikasi duplikasi lebih lanjut. Varifikasi duplikasi ini dilakukan apabila terjadi kasus file yang sama dikirim 2 kali, atau kasus file kedua yang dikirim memiliki data yang sama di database. Untuk menangani hal tersebut dilakukan dengan aturan:
 - Jika belum ada, dilakukan INSERT ke database
 - Jika sudah ada, tetapi datanya berbeda, data yang dipilih sebelumnya dilakukan UPDATE ke database
-- JIka sudah ada dan datanya sama maka tidak ada perubahan yang terjadi
+- JIka sudah ada dan datanya sama maka tidak ada perubahan yang terjadi dan data dihitung sebagai UNCHANGED.
+Jika terdapat perbedaan nilai, record yang sudah ada di database dilakukan UPDATE menggunakan data terbaru.
 
 
 # Time Spent

@@ -9,23 +9,9 @@ const router = Router();
 function createDedupeKey(
     mention: NormalizedMention
 ): string {
-    if (mention.url !== null) {
         return `url:${mention.url}`;
-    }
+    };
 
-    if (mention.content !== null) {
-        const contentKey = mention.content
-            .toLowerCase()
-            .trim()
-            .split(/\s+/)
-            .slice(0, 7)
-            .join(" ");
-
-        return `content:${contentKey}`;
-    }
-
-    return `external_id:${mention.external_id}`;
-}
 
 function isDifferent(
     existing: NormalizedMention,
