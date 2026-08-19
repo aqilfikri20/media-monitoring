@@ -19,110 +19,82 @@ function keepLongestContent(
     first: NormalizedMention,
     second: NormalizedMention
 ): NormalizedMention {
-    if (first.content === null) {
-        return second;
-    }
 
-    if (second.content === null) {
-        return first;
-    }
+    const firstLength =
+        first.content?.length ?? 0;
 
-    if (second.content.length > first.content.length) {
+    const secondLength =
+        second.content?.length ?? 0;
+
+    if (secondLength > firstLength) {
         return second;
     }
 
     return first;
 }
 
-function deduplicateByUrl(
-    mentions: NormalizedMention[]
-): NormalizedMention[] {
-    const result: NormalizedMention[] = [];
+function isDuplicate(
+    first: NormalizedMention,
+    second: NormalizedMention
+): boolean {
 
-    for (const mention of mentions) {
-        if (mention.url === null) {
-            result.push(mention);
-            continue;
-        }
+    const sameUrl =
+        first.url !== null &&
+        second.url !== null &&
+        first.url === second.url;
 
-        const existingIndex = result.findIndex(
-            (existing) =>
-                existing.url !== null &&
-                existing.url === mention.url
-        );
+    const firstContent =
+        getFirstSevenWords(first.content);
 
-        if (existingIndex === -1) {
-            result.push(mention);
-            continue;
-        }
+    const secondContent =
+        getFirstSevenWords(second.content);
 
-        const existing = result[existingIndex];
+    const sameContent =
+        firstContent !== null &&
+        secondContent !== null &&
+        firstContent === secondContent;
 
-        if (existing === undefined) {
-            result.push(mention);
-            continue;
-        }
-
-        result[existingIndex] = keepLongestContent(
-            existing,
-            mention
-        );
-    }
-
-    return result;
-}
-
-function deduplicateByContent(
-    mentions: NormalizedMention[]
-): NormalizedMention[] {
-    const result: NormalizedMention[] = [];
-
-    for (const mention of mentions) {
-        const key = getFirstSevenWords(
-            mention.content
-        );
-
-        if (key === null) {
-            result.push(mention);
-            continue;
-        }
-
-        const existingIndex = result.findIndex(
-            (existing) =>
-                getFirstSevenWords(existing.content) === key
-        );
-
-        if (existingIndex === -1) {
-            result.push(mention);
-            continue;
-        }
-
-        const existing = result[existingIndex];
-
-        if (existing === undefined) {
-            result.push(mention);
-            continue;
-        }
-
-        result[existingIndex] = keepLongestContent(
-            existing,
-            mention
-        );
-    }
-
-    return result;
+    return sameUrl || sameContent;
 }
 
 export function deduplicateMentions(
     mentions: NormalizedMention[]
 ): NormalizedMention[] {
-    const uniqueByUrl = deduplicateByUrl(
-        mentions
-    );
 
-    const uniqueByContent = deduplicateByContent(
-        uniqueByUrl
-    );
+    const result: NormalizedMention[] = [];
 
-    return uniqueByContent;
+    for (const mention of mentions) {
+
+        const existingIndex =
+            result.findIndex(
+                (existing) =>
+                    isDuplicate(
+                        existing,
+                        mention
+                    )
+            );
+
+        // Tidak ditemukan duplicate
+        if (existingIndex === -1) {
+            result.push(mention);
+            continue;
+        }
+
+        const existing =
+            result[existingIndex];
+
+        if (existing === undefined) {
+            result.push(mention);
+            continue;
+        }
+
+        // Duplicate → simpan content terpanjang
+        result[existingIndex] =
+            keepLongestContent(
+                existing,
+                mention
+            );
+    }
+
+    return result;
 }
